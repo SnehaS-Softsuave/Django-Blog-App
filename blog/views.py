@@ -24,6 +24,7 @@ def detail(request,slug):
     # logger.debug(f'post value is {post}')
     try:
         post= Post.objects.get(slug=slug)
+        related_posts=Post.objects.filter(category=post.category).exclude(pk=post.id)
     except Post.DoesNotExist:
         raise Http404("Blog Post Doesn't exist")
 
