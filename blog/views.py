@@ -3,6 +3,8 @@ from django.http import HttpResponse, Http404
 from django.urls import reverse
 import logging
 from blog.models import Post
+from django.core.paginator import Paginator
+from .forms import ContactForm
 
 # posts=[
 #     {'id':1,'title':'Post 1', 'content': "Content of Post 1"},
@@ -13,9 +15,13 @@ from blog.models import Post
 
 def index(request):
     # Getting data from Post model
-    posts=Post.objects.all()
+    all_posts=Post.objects.all()
+    paginator=Paginator(all_posts,5)
+    page_number=request.GET.get('page')
+    page_obj=paginator.get_page(page_number)
+
     blog_title='Latest Posts'
-    return render(request, 'blog/index.html',{'blog_title':blog_title,'posts':posts})
+    return render(request, 'blog/index.html',{'blog_title':blog_title,'page_obj':page_obj})
 
 def detail(request,slug):
     # Below line is for getting static data
@@ -35,3 +41,13 @@ def old_url_redirect(request):
 
 def new_url_view(request):
     return HttpResponse("This is the redirected new page")
+
+def contact(request):
+    if (request.method=='POST'):
+        form = ContactForm(request.POST)
+        logger=logging.getLogger('TESTING')
+        if form.is_valid():
+            logger.debug(f'post data of contact form is {form.cleaned_data['name']},{form.cleaned_data['email']},{form.cleaned_data['message']}')
+        else:
+            logger.debug(f'Form validation Failed')
+    return render(request, 'blog/contact.html')
