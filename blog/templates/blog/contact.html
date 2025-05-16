@@ -6,6 +6,7 @@
     <div class="d-flex justify-content-center mt-5">
         <div class="d-flex gap-3 flex-column">
             <h3>Contact Form</h3>
+            {% comment %} Error messages {% endcomment %}
             {% for field in form%}
                 {% if field.errors %}
                     <div class="col-12">
@@ -16,6 +17,19 @@
                     </div>
                 {% endif %}
             {% endfor %}
+            {% comment %} Error messages end {% endcomment %}
+
+            {% comment %} Success message {% endcomment %}
+            {% if success_message%}
+                <div class="alert alert-success" role="alert">
+                    {{success_message}}
+                </div>
+            {% endif %}
+            {% comment %} Success message end{% endcomment %}
+
+
+
+
             <form method="post" class="row g-3">
                 {% csrf_token %}
                 <div class="col-md-6">

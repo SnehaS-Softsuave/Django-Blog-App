@@ -20,6 +20,6 @@ from django.urls import path, include
 handler404="myapp.views.custompage_not_found"
 
 urlpatterns = [
-    path('blog/',include("blog.urls")),
+    path('',include("blog.urls")),
     path('admin/', admin.site.urls),
 ]

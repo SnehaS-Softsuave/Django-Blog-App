@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse, Http404
 from django.urls import reverse
 import logging
-from blog.models import Post
+from blog.models import Post, About
 from django.core.paginator import Paginator
 from .forms import ContactForm
 
@@ -52,7 +52,15 @@ def contact(request):
         logger=logging.getLogger('TESTING')
         if form.is_valid():
             logger.debug(f'post data of contact form is {form.cleaned_data['name']},{form.cleaned_data['email']},{form.cleaned_data['message']}')
+            success_message="Your email sent sucessfully!"
+            return render(request,'blog/contact.html',{'form':form,'success_message':success_message})
+
         else:
             logger.debug(f'Form validation Failed')
         return render(request,'blog/contact.html',{'form':form, 'name':name, 'email':email, 'message':message})
     return render(request, 'blog/contact.html')
+
+
+def about(request):
+    about_content=About.objects.first().content
+    return render(request,'blog/about.html',{'about_content':about_content})
